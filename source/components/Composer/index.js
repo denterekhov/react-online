@@ -6,7 +6,7 @@ export default class Composer extends Component {
     render() {
         const { 
             avatar,
-            currentUserFirstName 
+            currentUserFirstName,
         } = this.props;
 
         return (
