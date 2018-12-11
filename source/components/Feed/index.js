@@ -1,6 +1,8 @@
 //Core
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
+import { Transition } from 'react-transition-group';
+import { fromTo } from 'gsap';
 
 //Components
 import { withProfile } from 'components/HOC/withProfile';
@@ -9,6 +11,7 @@ import StatusBar from 'components/StatusBar';
 import Composer from 'components/Composer';
 import Post from 'components/Post';
 import Spinner from 'components/Spinner';
+import Postman from 'components/Postman';
 
 //Instruments
 import Styles from './styles.m.css';
@@ -45,7 +48,7 @@ export default class Feed extends Component {
             }
         });
 
-        socket.on('likePost', (postJSON) => {
+        socket.on('like', (postJSON) => {
             const { data: likedPost, meta } = JSON.parse(postJSON);
             if(`${currentUserFirstName} ${currentUserLastName}` !== `${meta.authorFirstName} ${meta.authorLastName}`) {
                 this.setState(({ posts }) => ({
@@ -137,7 +140,34 @@ export default class Feed extends Component {
             posts:           posts.filter((post) => post.id !== id),
             isPostsFetching: false,
         }))
-    }
+    };
+
+    _animateComposerEnter = (composer) => {
+        fromTo(
+            composer, 
+            1, 
+            { opacity: 0, rotationX: 50 }, 
+            { opacity: 1, rotationX: 0 }
+        );
+    };
+
+    _animatePostmanShow = (postman) => {
+        fromTo(
+            postman, 
+            1, 
+            { x: 300 }, 
+            { x: 0 }
+        );
+    };
+    
+    _animatePostmanHide = (postman) => {
+        fromTo(
+            postman, 
+            1, 
+            { x: 0 }, 
+            { x: 300 }
+        );
+    };
 
     render() {
         const { posts, isPostsFetching } = this.state;
@@ -158,7 +188,23 @@ export default class Feed extends Component {
             <section className = { Styles.feed }>
                 <Spinner isSpinning = { isPostsFetching } />
                 <StatusBar />
-                <Composer _createPost = { this._createPost } />
+                <Transition
+                    appear
+                    in
+                    timeout = { 1000 }
+                    onEnter = { this._animateComposerEnter }
+                    >
+                    <Composer _createPost = { this._createPost } />
+                </Transition>
+                <Transition
+                    appear
+                    in
+                    timeout = { 5000 }
+                    onEnter = { this._animatePostmanShow }
+                    onEntered = { this._animatePostmanHide }
+                    >
+                    <Postman />
+                </Transition>
                 {postsJSX}
             </section>
         ) 

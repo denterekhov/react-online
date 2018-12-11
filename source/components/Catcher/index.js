@@ -15,9 +15,9 @@ export default class Catcher extends Component {
     };
 
     componentDidCatch(error, stack) {
-        console.log('error: ', error);
-        console.log('stack: ', stack.componentStack);
-        
+      console.log('error: ', error);
+      console.log('stack: ', stack.componentStack);
+      
         this.setState({
             error: true,
         })
