@@ -1,7 +1,7 @@
 //Core
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { Transition } from 'react-transition-group';
+import { Transition, CSSTransition, TransitionGroup } from 'react-transition-group';
 import { fromTo } from 'gsap';
 
 //Components
@@ -174,14 +174,29 @@ export default class Feed extends Component {
 
         const postsJSX = posts.map((post) => {
             return (
-                <Catcher key = { post.id }>
-                    <Post 
-                        key = { post.id } 
-                        { ...post } 
-                        _likePost = { this._likePost } 
-                        _deletePost = { this._deletePost }
-                    />
-                </Catcher>)
+                <CSSTransition 
+                    key = { post.id }
+                    classNames = {{
+                        enter:        Styles.postInStart,
+                        enterActive:  Styles.postInEnd,
+                        exit:         Styles.postOutStart,
+                        exitActive:   Styles.postOutEnd,
+                    }}
+                    timeout = {{
+                        enter: 500,
+                        exit: 400,
+                    }}>
+
+                    <Catcher>
+                        <Post 
+                            key = { post.id } 
+                            { ...post } 
+                            _likePost = { this._likePost } 
+                            _deletePost = { this._deletePost }
+                        />
+                    </Catcher>
+                </CSSTransition>
+            )
         });
 
         return (
@@ -204,8 +219,10 @@ export default class Feed extends Component {
                     onEntered = { this._animatePostmanHide }
                     >
                     <Postman />
-                </Transition>
-                {postsJSX}
+                </Transition>  
+                <TransitionGroup>
+                    {postsJSX}
+                </TransitionGroup>
             </section>
         ) 
     }
