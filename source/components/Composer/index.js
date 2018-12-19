@@ -1,6 +1,6 @@
 //Core
 import React, { Component } from 'react';
-import PropTypes from 'prop-types';
+import { func, string } from 'prop-types';
 
 //Components
 import { withProfile } from 'components/HOC/withProfile';
@@ -8,10 +8,11 @@ import { withProfile } from 'components/HOC/withProfile';
 //Instruments
 import Styles from './styles.m.css';
 
-@withProfile
-export default class Composer extends Component {
+export class Composer extends Component {
     static propTypes = {
-        _createPost: PropTypes.func.isRequired,
+        _createPost:          func.isRequired,
+        avatar:               string.isRequired,
+        currentUserFirstName: string.isRequired,
     };
 
     state = {
@@ -27,7 +28,6 @@ export default class Composer extends Component {
     _handleFormSubmit = (event) => {
         event.preventDefault();
         this._submitComment();
-
     };
 
     _submitComment = () => {
@@ -52,7 +52,7 @@ export default class Composer extends Component {
 
     render() {
         const { comment } = this.state;
-        const { avatar, currentUserFirstName } = this.props
+        const { avatar, currentUserFirstName } = this.props;
         return (
             <section className = { Styles.composer }>
                 <img src = { avatar } />
@@ -69,3 +69,5 @@ export default class Composer extends Component {
         )
     }
 }
+
+export default withProfile(Composer);
