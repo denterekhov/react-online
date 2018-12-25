@@ -2,6 +2,7 @@
 import React, { Component } from 'react';
 import { Transition } from 'react-transition-group';
 import { fromTo } from 'gsap';
+import { Link } from 'react-router-dom';
 
 //Components
 import { withProfile } from 'components/HOC/withProfile';
@@ -18,6 +19,12 @@ export default class StatusBar extends Component {
     };
 
     componentDidMount() {
+        if(socket.connected) {
+            this.setState({
+                online: true,
+            })
+        }
+
         socket.on('connect', () =>
             this.setState({
                 online: true,
@@ -45,7 +52,7 @@ export default class StatusBar extends Component {
     }
 
     render() {
-        const { avatar, currentUserFirstName, currentUserLastName } = this.props;
+        const { avatar, currentUserFirstName, _logOut } = this.props;
         const { online } = this.state;
         const statusStyle = cx(Styles.status, {
             [Styles.online]: online,
@@ -65,12 +72,12 @@ export default class StatusBar extends Component {
                         <div>{statusMessage}</div>
                         <span />
                     </div>
-                    <button>
+                    <Link to = '/profile'>
                         <img src = { avatar } />
                         <span>{ currentUserFirstName }</span>
-                        &nbsp;
-                        <span>{ currentUserLastName }</span>
-                    </button>
+                    </Link>
+                    <Link to = '/feed'>Feed</Link>
+                    <Link onClick = { _logOut } to = '/login'>Sign out</Link>
                 </section>
             </Transition>
         )
