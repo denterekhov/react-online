@@ -94,10 +94,11 @@ describe('Composer component:', () => {
   test('_submitComment and _handleFormSubmit class methods should be invoked once after form is submitted', () => {
     expect(_submitCommentSpy).toHaveBeenCalledTimes(1);
     expect(_handleFormSubmitSpy).toHaveBeenCalledTimes(1);
+    jest.clearAllMocks();
   });
 
   test('should have nonzero length of avatar property in props', () => {
-    expect(props.avatar).not.toHaveLength(0);
+    expect(props.avatar).toBeDefined();
   });
 
   test('should have nonzero length of currentUserFirstName property in props', () => {
@@ -105,15 +106,26 @@ describe('Composer component:', () => {
   });
 
   test('_submitComment function should return null if comment is empty', () => {
-    result.setState({
-      comment: '',
-    })
-    expect(result.instance()._submitComment(result.state())).toEqual(null);
+    result.setState(initialState);
+    result.instance()._submitComment();
+    expect(_submitCommentSpy).toHaveBeenCalledTimes(1);
+    expect(_submitCommentSpy).toHaveReturnedWith(null);
+    jest.clearAllMocks();
   });
 
   test('_submitOnEnter function should be invoked once when "Enter" key is pressed', () => {
-    result.find('textarea').simulate('keypress', {key: 'Enter'});
+    result.find('textarea').simulate('keypress', {
+        key: 'Enter'
+    });
     expect(_submitOnEnterSpy).toHaveBeenCalledTimes(1);
     expect(result.state()).toEqual(initialState);
+    jest.clearAllMocks();
+  });
+
+  test('_submitOnEnter function should not be invoked when "q" key is pressed', () => {
+    result.find('textarea').simulate('keypress', {
+        key: 'q'
+    });
+    expect(_submitCommentSpy).toHaveBeenCalledTimes(0);
   });
 })
