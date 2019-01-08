@@ -25,6 +25,7 @@ export default class App extends Component {
 
     componentDidMount = () => {
         const isLoggedIn = JSON.parse(localStorage.getItem('facebook-auth'));
+        console.log('isLoggedIn: ', isLoggedIn);
         this.setState({
             isLoggedIn: !!isLoggedIn,
         });
@@ -62,7 +63,9 @@ export default class App extends Component {
                         ) 
                         : (
                             <Switch>
-                                <Route component = {() => <Login _logIn = { this._logIn }/>} path = '/login' />
+                                <Route render = {(props) => (
+                                    <Login _logIn = { this._logIn } {...props} />
+                                )} path = '/login' />
                                 <Redirect to = '/login' />
                             </Switch>
                         )
