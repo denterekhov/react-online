@@ -1,18 +1,20 @@
 //Core
 import React, { Component, createContext } from 'react';
 
-const { Provider, Consumer } = createContext();
+const myContext = createContext();
 
 const withProfile = (Enhanceable) => {
     return class WithProfile extends Component {
+        static contextType = myContext;
         render() {
             return (
-                <Consumer>
-                    {(context) => <Enhanceable {...context} {...this.props} />}
-                </Consumer>
+                <Enhanceable 
+                    {...this.context} 
+                    {...this.props} 
+                />
             )
         }
     }
 }
 
-export { Provider, Consumer, withProfile };
+export { myContext, withProfile };

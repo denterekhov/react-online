@@ -9,7 +9,7 @@ import StatusBar from 'components/StatusBar';
 import Feed from 'components/Feed';
 import Profile from 'components/Profile';
 import Login from 'components/Login';
-import { Provider } from 'components/HOC/withProfile';
+import { myContext } from 'components/HOC/withProfile';
 
 //Instruments
 import avatar from 'theme/assets/lisa';
@@ -48,6 +48,7 @@ export default class App extends Component {
     
     render() {
         const { isLoggedIn, isInitialized } = this.state;
+        const { Provider } = myContext;
         return (
             <Catcher>
                 <Provider value = { this.state }>
