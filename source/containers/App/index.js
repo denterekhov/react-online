@@ -21,13 +21,14 @@ export default class App extends Component {
         currentUserFirstName: 'Денис',
         currentUserLastName: 'Терехов',
         isLoggedIn: false,
+        isInitialized: false,
     }
 
     componentDidMount = () => {
         const isLoggedIn = JSON.parse(localStorage.getItem('facebook-auth'));
-        console.log('isLoggedIn: ', isLoggedIn);
         this.setState({
             isLoggedIn: !!isLoggedIn,
+            isInitialized: true,
         });
     }
 
@@ -46,28 +47,37 @@ export default class App extends Component {
     } 
     
     render() {
-        const { isLoggedIn } = this.state;
+        const { isLoggedIn, isInitialized } = this.state;
         return (
             <Catcher>
                 <Provider value = { this.state }>
-                    {isLoggedIn 
-                        ? (
-                            <>
-                                <StatusBar _logOut = { this._logOut } />
+                    {!isInitialized
+                        ? null
+                        : (isLoggedIn 
+                            ? (
+                                <>
+                                    <StatusBar _logOut = { this._logOut } />
+                                    <Switch>
+                                        <Route 
+                                            component = { Feed } 
+                                            path = '/feed' 
+                                        />
+                                        <Route 
+                                            component = { Profile } 
+                                            path = '/profile' 
+                                        />
+                                        <Redirect to = '/feed' />
+                                    </Switch>
+                                </>
+                            ) 
+                            : (
                                 <Switch>
-                                    <Route component = { Feed } path = '/feed' />
-                                    <Route component = { Profile } path = '/profile' />
-                                    <Redirect to = '/feed' />
+                                    <Route render = {(props) => (
+                                        <Login _logIn = { this._logIn } {...props} />
+                                    )} path = '/login' />
+                                    <Redirect to = '/login' />
                                 </Switch>
-                            </>
-                        ) 
-                        : (
-                            <Switch>
-                                <Route render = {(props) => (
-                                    <Login _logIn = { this._logIn } {...props} />
-                                )} path = '/login' />
-                                <Redirect to = '/login' />
-                            </Switch>
+                            )
                         )
                     }
                 </Provider>
