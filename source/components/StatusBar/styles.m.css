@@ -5,7 +5,7 @@
     align-items: center;
     justify-content: center;
     width: 100%;
-    height: 42px;
+    padding: 6px 0;
     border-bottom: #29487d;
     background-color: #4267b2;
 
@@ -78,5 +78,8 @@
             background: #f40009;
             box-shadow: 0 0 2px #f40009;
         }
+    }
+    @media(width <= 480px) {
+        flex-direction: column;
     }
 }

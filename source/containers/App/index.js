@@ -12,7 +12,7 @@ import Login from 'components/Login';
 import { myContext } from 'components/HOC/withProfile';
 
 //Instruments
-import avatar from 'theme/assets/lisa';
+import avatar from 'theme/assets/Den';
 
 @hot(module)
 export default class App extends Component {
